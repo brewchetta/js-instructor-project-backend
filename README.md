@@ -1,1 +1,3 @@
 # OMG TRIPS!
+
+So many trips! I guess a readme will go here...
