@@ -5,8 +5,8 @@ Location.delete_all
 puts "Building a few locations..."
 new_york = Location.create(name: "NYC", lat: 40.71, long: -74.00)
 phoenix = Location.create(name: "Phoenix AZ", lat: 33.45, long: -112.07)
-north_pole = Location.create(name: "North Pole / Santa's Workshop", lat: 0, long: 0)
-south_pole = Location.create(name: "South Pole / Penguin's Workshop", lat: 179.5, long: 179.5)
+north_pole = Location.create(name: "North Pole / Santa's Workshop", lat: 0, long: 89)
+south_pole = Location.create(name: "South Pole / Penguin's Workshop", lat: 0, long: -89)
 
 puts "Building a few trips..."
 Location.all.each do |location|
