@@ -11,8 +11,16 @@ class TripsController < ApplicationController
   end
 
   def create
-    location = Location.find_by_id(params[:location_id])
-    trip = Trip.new(trip_params)
+    location = Location.find_by(name: params[:trip][:location])
+    if !location
+      geocoded_location = Geocoder.search(params[:location] || params[:trip][:location])
+      location = Location.create({
+        name: params[:location] || params[:trip][:location],
+        lat: geocoded_location.first&.coordinates[0],
+        long: geocoded_location.first&.coordinates[1]
+      })
+    end
+    trip = location.trips.build(trip_params)
     if trip.save
       render json: trip
     else
@@ -42,7 +50,7 @@ class TripsController < ApplicationController
   private
 
   def trip_params
-    params.require(:trip).permit(:long, :lat, :name)
+    params.require(:trip).permit(:name, :content, :user_id, :location_id, :date)
   end
 
   def find_trip
