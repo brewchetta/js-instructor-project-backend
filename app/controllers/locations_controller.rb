@@ -12,6 +12,8 @@ class LocationsController < ApplicationController
 
   def create
     location = Location.new(location_params)
+    location.lat ||= Geocoder.search(params[:location][:name]).first.coordinates[0]
+    location.long ||= Geocoder.search(params[:location][:name]).first.coordinates[1]
     if location.save
       render json: location
     else
