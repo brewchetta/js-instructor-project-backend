@@ -17,7 +17,7 @@ class TripsController < ApplicationController
       render json: trip
     else
       render json: {
-        error: trip.errors.full_messages,
+        error: [trip.errors.full_messages, location.errors.full_messages],
         status: 406
       }, status: 406
     end
@@ -53,12 +53,17 @@ class TripsController < ApplicationController
     location = Location.find_by(name: params[:trip][:location])
     if !location
       geocoded_location = Geocoder.search(params[:location] || params[:trip][:location])
-      location = Location.create({
-        name: params[:location] || params[:trip][:location],
-        lat: geocoded_location.first&.coordinates[0],
-        long: geocoded_location.first&.coordinates[1]
-      })
+      if geocoded_location.length > 0
+        location = Location.create({
+          name: params[:location] || params[:trip][:location],
+          lat: geocoded_location.first&.coordinates[0],
+          long: geocoded_location.first&.coordinates[1]
+        })
+      else
+        location = Location.create
+      end
     end
+    puts location
     location
   end
 
